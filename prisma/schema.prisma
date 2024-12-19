@@ -26,9 +26,14 @@ model User {
   email     String   @unique
   password  String
   photo     String? // Campo opcional
+  active    Boolean  @default(true)
   roles     Role[]   @relation("UserRoles")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Índice no campo email
+  @@index([email])
+  @@map("users")
 }
 
 model Role {
@@ -38,13 +43,17 @@ model Role {
   users       User[]       @relation("UserRoles")
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+
+  @@map("roles")
 }
 
 model Permission {
-  id          String  @id @default(cuid())
-  name        String  @unique
+  id          String   @id @default(cuid())
+  name        String   @unique
   description String
-  roles       Role[]  @relation("RolePermissions")
+  roles       Role[]   @relation("RolePermissions")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@map("permissions")
 }
